@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'usuarios',
+    'propuestas',
+    'gestion_licitaciones',  
 ]
 
 MIDDLEWARE = [
@@ -50,6 +54,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'licitaciones.urls'
+
+AUTH_USER_MODEL = 'usuarios.Usuario'
 
 TEMPLATES = [
     {
@@ -68,6 +74,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'licitaciones.wsgi.application'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
 
 
 # Database

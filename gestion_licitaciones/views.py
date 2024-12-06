@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView
 from .models import Licitacion
 from .serializers import LicitacionSerializer
 
@@ -51,3 +52,7 @@ class LicitacionDetailView(APIView):
             return Response({'error': 'Licitacion not found'}, status=status.HTTP_404_NOT_FOUND)
         licitacion.delete()
         return Response({'message': 'Licitacion deleted'}, status=status.HTTP_204_NO_CONTENT)
+
+class LicitacionListView(ListAPIView):
+    queryset = Licitacion.objects.all()
+    serializer_class = LicitacionSerializer

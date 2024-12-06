@@ -25,4 +25,5 @@ urlpatterns = [
     path('', root_view, name='root'),  # Vista para la raíz
     path('admin/', admin.site.urls),
     path('api/usuarios/', include('usuarios.urls')),
+    path('api/licitaciones/', include('gestion_licitaciones.urls')),  # Conecta las rutas de licitaciones
 ]

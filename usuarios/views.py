@@ -4,9 +4,11 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Usuario
 from .serializers import RegistroSerializer, UsuarioSerializer
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 class RegistroView(APIView):
+    permission_classes = [AllowAny]  # Permitir acceso sin autenticación
+
     def post(self, request):
         serializer = RegistroSerializer(data=request.data)
         if serializer.is_valid():

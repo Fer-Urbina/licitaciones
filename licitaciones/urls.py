@@ -16,8 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import JsonResponse
+
+def root_view(request):
+    return JsonResponse({"message": "API de licitaciones está funcionando correctamente."})
 
 urlpatterns = [
+    path('', root_view, name='root'),  # Vista para la raíz
     path('admin/', admin.site.urls),
     path('api/usuarios/', include('usuarios.urls')),
 ]

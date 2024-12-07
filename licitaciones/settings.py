@@ -89,16 +89,16 @@ REST_FRAMEWORK = {
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-import os
+from decouple import config
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'licitaciones'),  # Local por defecto
-        'USER': os.getenv('DB_USER', 'postgres'),      # Usuario local por defecto
-        'PASSWORD': os.getenv('DB_PASSWORD', 'Licitacion123'),  # Contraseña local
-        'HOST': os.getenv('DB_HOST', '127.0.0.1'),     # Localhost por defecto
-        'PORT': os.getenv('DB_PORT', '5432'),          # Puerto estándar PostgreSQL
+        'NAME': config('DB_NAME', default='licitaciones'),
+        'USER': config('DB_USER', default='postgres'),
+        'PASSWORD': config('DB_PASSWORD', default='Licitacion123'),
+        'HOST': config('DB_HOST', default='127.0.0.1'),
+        'PORT': config('DB_PORT', default='5432'),
     }
 }
 

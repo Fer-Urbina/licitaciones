@@ -26,4 +26,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/usuarios/', include('usuarios.urls')),
     path('api/licitaciones/', include('gestion_licitaciones.urls')),  # Conecta las rutas de licitaciones
+    path('api/propuestas/', include('propuestas.urls')),  # Conecta las rutas de propuestas
 ]

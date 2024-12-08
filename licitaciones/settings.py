@@ -24,7 +24,7 @@ import os
 SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key-for-local')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 

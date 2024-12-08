@@ -28,7 +28,7 @@ class CrearEvaluacionView(APIView):
 
         serializer = EvaluacionSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(evaluador=request.user, propuesta=propuesta)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
 from .models import Licitacion
 from .serializers import LicitacionSerializer
+from propuestas.models import Propuesta
 
 class LicitacionListCreateView(APIView):
     permission_classes = [IsAuthenticated]
@@ -56,3 +57,27 @@ class LicitacionDetailView(APIView):
 class LicitacionListView(ListAPIView):
     queryset = Licitacion.objects.all()
     serializer_class = LicitacionSerializer
+
+class SeleccionarGanadorView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, licitacion_id, propuesta_id):
+        # Verificar si el usuario es el creador de la licitación
+        try:
+            licitacion = Licitacion.objects.get(id=licitacion_id, usuario=request.user)
+        except Licitacion.DoesNotExist:
+            return Response({'error': 'Licitación no encontrada o no tiene permisos'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Verificar que la propuesta pertenece a la licitación
+        try:
+            propuesta = Propuesta.objects.get(id=propuesta_id, licitacion=licitacion)
+        except Propuesta.DoesNotExist:
+            return Response({'error': 'Propuesta no encontrada para esta licitación'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Asignar la propuesta como ganadora
+        licitacion.ganador = propuesta
+        licitacion.save()
+
+        return Response({
+            'message': f'La propuesta con id {propuesta.id} ha sido seleccionada como ganadora para la licitación {licitacion.titulo}'
+        }, status=status.HTTP_200_OK)

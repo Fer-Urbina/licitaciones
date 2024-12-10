@@ -14,6 +14,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from propuestas.forms import PropuestaForm
+from .forms import LicitacionForm
 
 class LicitacionListCreateView(APIView):
     permission_classes = [IsAuthenticated]
@@ -114,13 +115,32 @@ def dashboard(request):
 
 @login_required
 def crear_licitacion_view(request):
-    return render(request, 'licitaciones/crear_licitacion.html')  # Plantilla para crear licitación
+    if request.user.es_licitador:
+        if request.method == 'POST':
+            form = LicitacionForm(request.POST)
+            if form.is_valid():
+                nueva_licitacion = form.save(commit=False)
+                nueva_licitacion.usuario = request.user
+                nueva_licitacion.save()
+                return HttpResponseRedirect(reverse('dashboard'))  # Redirige al dashboard
+        else:
+            form = LicitacionForm()
+        return render(request, 'licitaciones/crear_licitacion.html', {'form': form})
+    else:
+        return HttpResponseRedirect(reverse('dashboard'))  # Redirige al dashboard si no es licitador
 
 def listar_licitaciones(request):
     return render(request, 'licitaciones/listar.html')  # Asegúrate de que este archivo exista
 
 def ver_licitacion_view(request, licitacion_id):
     licitacion = get_object_or_404(Licitacion, id=licitacion_id)
+
+    if request.method == 'POST' and request.POST.get('cerrar_licitacion') == 'Cerrar':
+        if licitacion.estado == 'Abierta':
+            licitacion.estado = 'Cerrada'
+            licitacion.save()
+        return HttpResponseRedirect(reverse('ver_licitacion', args=[licitacion_id]))
+
     return render(request, 'licitaciones/ver_licitacion.html', {'licitacion': licitacion})
 
 @login_required
@@ -137,3 +157,20 @@ def enviar_propuesta_view(request, licitacion_id):
     else:
         form = PropuestaForm()
     return render(request, 'propuestas/enviar_propuesta.html', {'form': form, 'licitacion': licitacion})
+
+@login_required
+def seleccionar_ganador_view(request, licitacion_id, propuesta_id):
+    licitacion = get_object_or_404(Licitacion, id=licitacion_id, usuario=request.user)
+
+    if licitacion.estado == 'Abierta':
+        return render(request, 'error.html', {'message': 'La licitación aún está abierta. No se puede seleccionar un ganador.'})
+
+    if licitacion.ganador:
+        return render(request, 'error.html', {'message': 'Ya se ha seleccionado un ganador para esta licitación.'})
+
+    propuesta = get_object_or_404(Propuesta, id=propuesta_id, licitacion=licitacion)
+
+    licitacion.ganador = propuesta
+    licitacion.save()
+
+    return HttpResponseRedirect(reverse('dashboard'))  # Redirige al dashboard

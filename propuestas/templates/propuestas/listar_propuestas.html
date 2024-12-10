@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Mis Propuestas</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Mis Propuestas</h1>
+        <table class="table-licitaciones">
+            <thead>
+                <tr>
+                    <th>Licitación</th>
+                    <th>Oferta Técnica</th>
+                    <th>Oferta Económica</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for propuesta in propuestas %}
+                    <tr>
+                        <td>{{ propuesta.licitacion.titulo }}</td>
+                        <td>{{ propuesta.oferta_tecnica }}</td>
+                        <td>${{ propuesta.oferta_economica }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">No tienes propuestas enviadas.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'dashboard' %}" class="dashboard-link">Regresar</a>
+    </div>
+</body>
+</html>

@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import RegistroUsuarioForm
 from django.contrib.auth.decorators import login_required
+from propuestas.models import Propuesta
 
 class RegistroView(APIView):
     permission_classes = [AllowAny]  # Permitir acceso sin autenticación
@@ -78,9 +79,20 @@ def logout_view(request):
 def dashboard_view(request):
     user = request.user
     if user.es_licitador:
-        licitaciones = Licitacion.objects.filter(usuario=user)  # Licitaciones creadas por el usuario
+        # Licitaciones creadas por el licitador
+        licitaciones = Licitacion.objects.filter(usuario=user)
         context = {'rol': 'Licitador', 'licitaciones': licitaciones}
     else:
-        licitaciones_abiertas = Licitacion.objects.filter(estado='Abierta')  # Solo licitaciones abiertas
-        context = {'rol': 'Proveedor', 'licitaciones_abiertas': licitaciones_abiertas}
+        # Licitaciones abiertas para el proveedor
+        licitaciones_abiertas = Licitacion.objects.filter(estado='Abierta')
+        # Propuestas del proveedor
+        propuestas = Propuesta.objects.filter(proveedor=user)
+        # Propuestas ganadoras
+        ganadas = propuestas.filter(id__in=Licitacion.objects.filter(ganador__proveedor=user).values_list('ganador', flat=True))
+        context = {
+            'rol': 'Proveedor',
+            'licitaciones_abiertas': licitaciones_abiertas,
+            'propuestas': propuestas,
+            'ganadas': ganadas,
+        }
     return render(request, 'usuarios/dashboard.html', context)

@@ -6,8 +6,8 @@ from rest_framework import status
 from .models import Propuesta
 from gestion_licitaciones.models import Licitacion
 from .serializers import PropuestaSerializer
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
 
 class PropuestaCreateView(APIView):
     permission_classes = [AllowAny]
@@ -63,3 +63,14 @@ class PropuestaListForLicitacionView(APIView):
 def listar_propuestas_view(request):
     propuestas = Propuesta.objects.filter(proveedor=request.user)
     return render(request, 'propuestas/listar_propuestas.html', {'propuestas': propuestas})
+
+@login_required
+def listar_propuestas_por_licitacion(request, licitacion_id):
+    licitacion = get_object_or_404(Licitacion, id=licitacion_id)
+
+    if not request.user.es_licitador or licitacion.usuario != request.user:
+        return render(request, 'error.html', {'message': 'No tienes permisos para ver las propuestas de esta licitación.'})
+
+    propuestas = licitacion.propuestas.all()
+
+    return render(request, 'propuestas/listar_propuestas_por_licitacion.html', {'licitacion': licitacion, 'propuestas': propuestas})

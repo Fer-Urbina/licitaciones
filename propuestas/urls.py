@@ -7,4 +7,5 @@ urlpatterns = [
     path('list/', PropuestaListView.as_view(), name='listar-propuestas'),
     path('licitacion/<int:licitacion_id>/', PropuestaListForLicitacionView.as_view(), name='propuestas-licitacion'),
     path('mis_propuestas/', views.listar_propuestas_view, name='mis_propuestas'),
+    path('listar/<int:licitacion_id>/', views.listar_propuestas_por_licitacion, name='listar_propuestas_por_licitacion'),
 ]

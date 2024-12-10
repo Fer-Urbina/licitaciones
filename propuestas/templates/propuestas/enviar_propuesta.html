@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <title>Enviar Propuesta</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h1>Enviar Propuesta para {{ licitacion.titulo }}</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Enviar Propuesta</button>
-    </form>
+    <div class="propuesta-container">
+        <h1>Enviar Propuesta para {{ licitacion.titulo }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="propuesta-form-group">
+                <label for="oferta_tecnica">Oferta Técnica:</label>
+                {{ form.oferta_tecnica }}
+            </div>
+            <div class="propuesta-form-group">
+                <label for="oferta_economica">Oferta Económica:</label>
+                {{ form.oferta_economica }}
+            </div>
+            <button type="submit" class="btn-propuesta-submit">Enviar Propuesta</button>
+        </form>
+    </div>
 </body>
 </html>

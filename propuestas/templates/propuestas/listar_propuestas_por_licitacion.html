@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Propuestas de la Licitación</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Propuestas para "{{ licitacion.titulo }}"</h1>
+        <table class="table-licitaciones">
+            <thead>
+                <tr>
+                    <th>Proveedor</th>
+                    <th>Oferta Técnica</th>
+                    <th>Oferta Económica</th>
+                    <th>Seleccionar Ganador</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for propuesta in propuestas %}
+                    <tr>
+                        <td>{{ propuesta.proveedor.username }}</td>
+                        <td>{{ propuesta.oferta_tecnica }}</td>
+                        <td>${{ propuesta.oferta_economica }}</td>
+                        <td>
+                            {% if licitacion.estado == 'Cerrada' and not licitacion.ganador %}
+                                <a href="{% url 'seleccionar_ganador' licitacion.id propuesta.id %}" class="action-link">Seleccionar</a>
+                            {% else %}
+                                {% if licitacion.ganador.id == propuesta.id %}
+                                    <strong>Ganador</strong>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No hay propuestas para esta licitación.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'dashboard' %}" class="dashboard-link">Regresar</a>
+    </div>
+</body>
+</html>

@@ -19,6 +19,7 @@
                     <li class="dashboard-links-item">
                         <span class="licitacion-titulo">{{ licitacion.titulo }}</span>
                         <a href="{% url 'ver_licitacion' licitacion.id %}" class="enviar-propuesta-btn">Ver detalles</a>
+                        <a href="{% url 'listar_propuestas_por_licitacion' licitacion.id %}" class="enviar-propuesta-btn">Ver Propuestas</a>
                     </li>
                 {% empty %}
                     <li class="dashboard-links-item">
@@ -41,7 +42,21 @@
                         <span class="licitacion-titulo">No hay licitaciones abiertas.</span>
                     </li>
                 {% endfor %}
-            </ul>            
+            </ul> 
+
+            <h2>Tus Propuestas Ganadoras</h2>
+            <ul class="dashboard-links">
+                {% for propuesta in ganadas %}
+                    <li class="dashboard-links-item">
+                        <span class="licitacion-titulo">Licitación: {{ propuesta.licitacion.titulo }}</span>
+                        <span>Oferta Económica: ${{ propuesta.oferta_economica }}</span>
+                    </li>
+                {% empty %}
+                    <li class="dashboard-links-item">
+                        <span class="licitacion-titulo">No tienes propuestas ganadoras.</span>
+                    </li>
+                {% endfor %}
+            </ul>
             <a href="{% url 'mis_propuestas' %}" class="dashboard-link">Mis Propuestas</a>
         {% endif %}
         <a href="{% url 'logout' %}" class="dashboard-link">Cerrar Sesión</a>

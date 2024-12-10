@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido, {{ user.username }}</h1>
+        <p>Rol: <strong>{{ rol }}</strong></p>
+
+        {% if rol == "Licitador" %}
+            <h2>Tus Licitaciones</h2>
+            <ul class="dashboard-links">
+                {% for licitacion in licitaciones %}
+                    <li class="dashboard-links-item">
+                        <span class="licitacion-titulo">{{ licitacion.titulo }}</span>
+                        <a href="{% url 'ver_licitacion' licitacion.id %}" class="enviar-propuesta-btn">Ver detalles</a>
+                    </li>
+                {% empty %}
+                    <li class="dashboard-links-item">
+                        <span class="licitacion-titulo">No tienes licitaciones creadas.</span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'crear_licitacion' %}" class="dashboard-link">Crear Nueva Licitación</a>
+
+        {% elif rol == "Proveedor" %}
+            <h2>Licitaciones Abiertas</h2>
+            <ul class="dashboard-links">
+                {% for licitacion in licitaciones_abiertas %}
+                    <li class="dashboard-links-item">
+                        <span class="licitacion-titulo">{{ licitacion.titulo }}</span>
+                        <a href="{% url 'enviar_propuesta' licitacion.id %}" class="enviar-propuesta-btn">Enviar Propuesta</a>
+                    </li>
+                {% empty %}
+                    <li class="dashboard-links-item">
+                        <span class="licitacion-titulo">No hay licitaciones abiertas.</span>
+                    </li>
+                {% endfor %}
+            </ul>            
+            <a href="{% url 'mis_propuestas' %}" class="dashboard-link">Mis Propuestas</a>
+        {% endif %}
+        <a href="{% url 'logout' %}" class="dashboard-link">Cerrar Sesión</a>
+    </div>
+</body>
+</html>

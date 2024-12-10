@@ -2,11 +2,26 @@ from django.db import models
 from usuarios.models import Usuario
 
 class Licitacion(models.Model):
+    ESTADO_CHOICES = [
+        ('Abierta', 'Abierta'),
+        ('Cerrada', 'Cerrada'),
+    ]
     titulo = models.CharField(max_length=255)
     descripcion = models.TextField()
     fecha_publicacion = models.DateTimeField(auto_now_add=True)
     fecha_cierre = models.DateTimeField()
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='licitaciones')
+    estado = models.CharField(
+        max_length=10,
+        choices=ESTADO_CHOICES,
+        default='Abierta',
+        help_text="Define si la licitación está abierta o cerrada"
+    )
+    usuario = models.ForeignKey(
+        Usuario,
+        on_delete=models.CASCADE,
+        related_name='licitaciones',
+        help_text="Usuario que creó la licitación"
+    )
     ganador = models.OneToOneField(
         'propuestas.Propuesta',  # Referencia diferida como cadena
         null=True,  # Puede ser null porque inicialmente no hay un ganador.

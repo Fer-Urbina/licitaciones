@@ -6,6 +6,8 @@ from rest_framework import status
 from .models import Propuesta
 from gestion_licitaciones.models import Licitacion
 from .serializers import PropuestaSerializer
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 class PropuestaCreateView(APIView):
     permission_classes = [AllowAny]
@@ -56,3 +58,8 @@ class PropuestaListForLicitacionView(APIView):
         propuestas = licitacion.propuestas.all()
         serializer = PropuestaSerializer(propuestas, many=True)
         return Response(serializer.data)
+
+@login_required
+def listar_propuestas_view(request):
+    propuestas = Propuesta.objects.filter(proveedor=request.user)
+    return render(request, 'propuestas/listar_propuestas.html', {'propuestas': propuestas})

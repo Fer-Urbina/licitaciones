@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Licitaciones</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Licitaciones</h1>
+        <ul>
+            {% for licitacion in licitaciones %}
+                <li>{{ licitacion.nombre }}</li>
+            {% empty %}
+                <li>No hay licitaciones disponibles.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Licitación</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalles de la Licitación</h1>
+        <p><strong>Título:</strong> {{ licitacion.titulo }}</p>
+        <p><strong>Descripción:</strong> {{ licitacion.descripcion }}</p>
+        <p><strong>Estado:</strong> {{ licitacion.estado }}</p>
+        <p><strong>Fecha de Publicación:</strong> {{ licitacion.fecha_publicacion }}</p>
+        <p><strong>Fecha de Cierre:</strong> {{ licitacion.fecha_cierre }}</p>
+        <a href="{% url 'dashboard' %}" class="btn">Regresar al Dashboard</a>
+    </div>
+</body>
+</html>

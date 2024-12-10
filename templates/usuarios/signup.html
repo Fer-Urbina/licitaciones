@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div class="container">
+        <h1>Registro</h1>
+        <form method="POST" action="{% url 'signup' %}">
+            {% csrf_token %}
+            <label for="correo">Correo Electrónico</label>
+            <input type="email" name="email" required>
+
+            <label for="username">Nombre de Usuario</label>
+            <input type="text" name="username" required>
+
+            <label for="password1">Contraseña</label>
+            <div class="password-container">
+                <input type="password" id="password1" name="password1" required>
+                <span class="toggle-password" onclick="togglePassword('password1')">👁️</span>
+            </div>
+
+            <label for="password2">Confirmar Contraseña</label>
+            <div class="password-container">
+                <input type="password" id="password2" name="password2" required>
+                <span class="toggle-password" onclick="togglePassword('password2')">👁️</span>
+            </div>
+
+            <label for="es_licitador">
+                <input type="checkbox" name="es_licitador" id="es_licitador">
+                ¿Es Licitador?
+            </label>
+
+            <button type="submit">Registrarse</button>
+        </form>
+        <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
+    </div>
+    <script>
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+            field.setAttribute('type', type);
+        }
+    </script>
+</body>
+</html>

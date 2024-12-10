@@ -1,3 +1,5 @@
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.utils.timezone import now
@@ -7,6 +9,11 @@ from rest_framework.generics import ListAPIView
 from .models import Licitacion
 from .serializers import LicitacionSerializer
 from propuestas.models import Propuesta
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from propuestas.forms import PropuestaForm
 
 class LicitacionListCreateView(APIView):
     permission_classes = [IsAuthenticated]
@@ -94,3 +101,39 @@ class LicitacionesPorEstadoView(ListAPIView):
             return Licitacion.objects.filter(fecha_cierre__lte=now()) | Licitacion.objects.filter(ganador__isnull=False)
         else:
             return Licitacion.objects.none()
+
+def index(request):
+    return render(request, 'index.html')
+
+def login_view(request):
+    return render(request, 'login.html')
+
+@login_required
+def dashboard(request):
+    return render(request, 'dashboard.html')
+
+@login_required
+def crear_licitacion_view(request):
+    return render(request, 'licitaciones/crear_licitacion.html')  # Plantilla para crear licitación
+
+def listar_licitaciones(request):
+    return render(request, 'licitaciones/listar.html')  # Asegúrate de que este archivo exista
+
+def ver_licitacion_view(request, licitacion_id):
+    licitacion = get_object_or_404(Licitacion, id=licitacion_id)
+    return render(request, 'licitaciones/ver_licitacion.html', {'licitacion': licitacion})
+
+@login_required
+def enviar_propuesta_view(request, licitacion_id):
+    licitacion = get_object_or_404(Licitacion, id=licitacion_id, estado='Abierta')
+    if request.method == 'POST':
+        form = PropuestaForm(request.POST)
+        if form.is_valid():
+            propuesta = form.save(commit=False)
+            propuesta.licitacion = licitacion
+            propuesta.proveedor = request.user
+            propuesta.save()
+            return HttpResponseRedirect(reverse('dashboard'))  # Redirige al dashboard
+    else:
+        form = PropuestaForm()
+    return render(request, 'propuestas/enviar_propuesta.html', {'form': form, 'licitacion': licitacion})

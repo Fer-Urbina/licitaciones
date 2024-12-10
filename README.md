@@ -35,6 +35,7 @@ La aplicación Licitaciones Web es una plataforma diseñada para gestionar licit
 
 Instala todas las dependencias con:
 
+```bash
 pip install -r requirements.txt
 
 ## Configuración

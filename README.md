@@ -1,6 +1,6 @@
 ### Licitaciones Web Application
 
-##Descripción
+## Descripción
 La aplicación Licitaciones Web es una plataforma diseñada para gestionar licitaciones de manera eficiente. Permite a los usuarios registrarse como licitadores o proveedores. Los licitadores pueden crear y gestionar licitaciones, mientras que los proveedores pueden enviar propuestas y participar en las mismas.
 
 ## Funcionalidades
@@ -20,6 +20,7 @@ La aplicación Licitaciones Web es una plataforma diseñada para gestionar licit
 * Recibir notificaciones de propuestas ganadoras.
 
 ## Requisitos Previos
+
 # Tecnologías
 * Python 3.11+
 * Django 5.1.4
@@ -72,13 +73,13 @@ propuestas: Gestión de propuestas enviadas por proveedores.
 
 ## Directorio Principal
 
-licitaciones/
-├── usuarios/
-├── gestion_licitaciones/
-├── propuestas/
-├── templates/
-├── static/
-└── manage.py
+ licitaciones/
+  ├── usuarios/
+  ├── gestion_licitaciones/
+  ├── propuestas/
+  ├── templates/
+  ├── static/
+  └── manage.py
 
 ## Colaboradores
 Este proyecto fue desarrollado por Fernando como parte de la asignatura Ingeniería de Software II

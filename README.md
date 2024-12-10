@@ -73,13 +73,13 @@ propuestas: Gestión de propuestas enviadas por proveedores.
 
 ## Directorio Principal
 
- licitaciones/
-  ├── usuarios/
-  ├── gestion_licitaciones/
-  ├── propuestas/
-  ├── templates/
-  ├── static/
-  └── manage.py
+licitaciones/
+├── usuarios/
+├── gestion_licitaciones/
+├── propuestas/
+├── templates/
+├── static/
+└── manage.py
 
 ## Colaboradores
 Este proyecto fue desarrollado por Fernando como parte de la asignatura Ingeniería de Software II

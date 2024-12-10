@@ -38,7 +38,7 @@ Instala todas las dependencias con:
 ```bash
 pip install -r requirements.txt
 
- Configuración
+Configuración
 1. Variables de Entorno
 Crea un archivo .env en el directorio raíz y añade las siguientes variables:
 
@@ -56,7 +56,7 @@ Asegúrate de configurar correctamente DEBUG y ALLOWED_HOSTS en settings.py:
 DEBUG = False
 ALLOWED_HOSTS = ['licitaciones-np08.onrender.com', 'localhost', '127.0.0.1']
 
- Cómo Usar
+Cómo Usar
 1. Ejecución Local
 
 python manage.py runserver
@@ -66,13 +66,14 @@ Accede a http://127.0.0.1:8000 para probar la aplicación localmente.
 2. Despliegue
 La aplicación está desplegada en Render y está disponible en el siguiente enlace: https://licitaciones-np08.onrender.com
 
- Estructura del Proyecto
- Principales Apps
+Estructura del Proyecto
+Principales Apps
+
 usuarios: Gestión de autenticación y roles.
 gestion_licitaciones: Creación y administración de licitaciones.
 propuestas: Gestión de propuestas enviadas por proveedores.
 
- Directorio Principal
+Directorio Principal
 
 licitaciones/
 ├── usuarios/
@@ -82,5 +83,5 @@ licitaciones/
 ├── static/
 └── manage.py
 
- Colaboradores
+Colaboradores
 Este proyecto fue desarrollado por Fernando como parte de la asignatura Ingeniería de Software II

@@ -24,9 +24,9 @@ import os
 SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key-for-local')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['licitaciones-np08.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition

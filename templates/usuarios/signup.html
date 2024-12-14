@@ -31,11 +31,18 @@
         <h1>Registro</h1>
         <form method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
+            
             <label for="correo">Correo Electrónico</label>
-            <input type="email" name="email" required>
+            <input type="email" name="email" id="correo" required>
 
             <label for="username">Nombre de Usuario</label>
-            <input type="text" name="username" required>
+            <input type="text" name="username" id="username" required>
+
+            <label for="first_name">Nombre</label>
+            <input type="text" name="first_name" id="first_name" required>
+
+            <label for="last_name">Apellido</label>
+            <input type="text" name="last_name" id="last_name" required>
 
             <label for="password1">Contraseña</label>
             <div class="password-container">

@@ -39,7 +39,8 @@ def signup_view(request):
     if request.method == 'POST':
         form = RegistroUsuarioForm(request.POST)
         if form.is_valid():
-            form.save()
+            # Aquí se invoca explícitamente el método save() del formulario
+            usuario = form.save()
             messages.success(request, 'Registro exitoso. Ahora puedes iniciar sesión.')
             return redirect('login')
         else:

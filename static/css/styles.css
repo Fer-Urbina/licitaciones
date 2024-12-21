@@ -413,3 +413,118 @@ textarea, input[type="text"], input[type="number"] {
 .table-propuestas tr:hover {
     background-color: #e6f7ff;
 }
+
+/* Estilo para el contenedor principal del formulario */
+.form-container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Título principal */
+h2.form-title {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Tabla de elementos */
+.table-container {
+    margin-top: 10px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #007BFF;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Inputs dentro de la tabla */
+table input[type="text"],
+table input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Botones de agregar y eliminar */
+button.add-item-btn, button.remove-item-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.remove-item-btn {
+    background-color: #dc3545;
+}
+
+button.add-item-btn:hover {
+    background-color: #218838;
+}
+
+button.remove-item-btn:hover {
+    background-color: #c82333;
+}
+
+/* Botón de enviar formulario */
+.submit-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    color: #ffffff;
+    font-size: 16px;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff; /* Azul */
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3; /* Azul más oscuro al pasar el mouse */
+}

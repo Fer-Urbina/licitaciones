@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Detalle</title>
+</head>
+<body>
+    <h1>Agregar Detalle a {{ licitacion.titulo }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Agregar Detalle</button>
+    </form>
+    <a href="{% url 'ver_licitacion' licitacion.id %}">Regresar</a>
+</body>
+</html>

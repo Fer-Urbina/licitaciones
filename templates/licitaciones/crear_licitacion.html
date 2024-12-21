@@ -3,18 +3,119 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Licitación</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Crear una nueva Licitación</h1>
-        <form method="POST" action="">
+        <h1>Crear Licitación</h1>
+        <form method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Crear Licitación</button>
+            {{ licitacion_form.as_p }}
+
+            <h2>Detalles de la Licitación</h2>
+            <table id="detalles-table" class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Cantidad</th>
+                        <th>Componentes Técnicos</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" name="nombre[]" required></td>
+                        <td><input type="number" name="cantidad[]" required></td>
+                        <td>
+                            <textarea name="componentes[]" rows="3" cols="30"></textarea>
+                        </td>
+                        <td><button type="button" class="remove-row">Eliminar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" id="add-row">Agregar Fila</button>
+            <button type="submit">Guardar Licitación</button>
         </form>
+        <a href="{% url 'dashboard' %}">Regresar</a>
     </div>
+
+    <script>
+        // Verifica que jQuery esté cargado
+        if (typeof jQuery === 'undefined') {
+            console.error("jQuery no está cargado. Verifica que el archivo jquery.min.js sea accesible.");
+        } else {
+            console.log("jQuery cargado correctamente.");
+        }
+
+        // Script para manejar las filas dinámicas
+        jQuery(document).ready(function () {
+            // Agregar fila
+            jQuery('#add-row').click(function () {
+                jQuery('#detalles-table tbody').append(`
+                    <tr>
+                        <td><input type="text" name="nombre[]" required></td>
+                        <td><input type="number" name="cantidad[]" required></td>
+                        <td>
+                            <textarea name="componentes[]" rows="3" cols="30"></textarea>
+                        </td>
+                        <td><button type="button" class="remove-row">Eliminar</button></td>
+                    </tr>
+                `);
+            });
+
+            // Eliminar fila
+            jQuery(document).on('click', '.remove-row', function () {
+                jQuery(this).closest('tr').remove();
+            });
+        });
+    </script>
+
+    <style>
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .styled-table th, .styled-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .styled-table th {
+            background-color: #4CAF50; /* Color de fondo para el encabezado */
+            color: white; /* Texto blanco */
+            font-weight: bold; /* Texto en negrita */
+            text-align: center; /* Centrado */
+        }
+        .styled-table tr:nth-child(even) {
+            background-color: #f2f2f2; /* Color para filas alternas */
+        }
+        .styled-table tr:hover {
+            background-color: #ddd; /* Efecto hover */
+        }
+        #add-row {
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        #add-row:hover {
+            background-color: #45a049;
+        }
+        .remove-row {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            cursor: pointer;
+        }
+        .remove-row:hover {
+            background-color: #e53935;
+        }
+    </style>
 </body>
 </html>

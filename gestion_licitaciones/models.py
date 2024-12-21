@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from usuarios.models import Usuario
 
 class Licitacion(models.Model):
@@ -14,21 +15,25 @@ class Licitacion(models.Model):
         max_length=10,
         choices=ESTADO_CHOICES,
         default='Abierta',
-        help_text="Define si la licitación está abierta o cerrada"
     )
-    usuario = models.ForeignKey(
-        Usuario,
-        on_delete=models.CASCADE,
-        related_name='licitaciones',
-        help_text="Usuario que creó la licitación"
-    )
-    ganador = models.OneToOneField(
-        'propuestas.Propuesta',  # Referencia diferida como cadena
-        null=True,  # Puede ser null porque inicialmente no hay un ganador.
-        blank=True,  # Permitir que el campo quede vacío.
-        on_delete=models.SET_NULL,  # Si se elimina la propuesta, el campo se establece como null.
-        related_name="ganador_de",  # Nombre de la relación inversa para acceder desde Propuesta.
-    )
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='licitaciones')
 
     def __str__(self):
         return self.titulo
+
+
+class DetalleLicitacion(models.Model):
+    licitacion = models.ForeignKey(Licitacion, on_delete=models.CASCADE, related_name='detalles')
+    nombre = models.CharField(max_length=255, help_text="Nombre del equipo, por ejemplo, CPU, Monitor.")
+    cantidad = models.PositiveIntegerField(default=1, help_text="Cantidad requerida.")
+
+    def __str__(self):
+        return f"{self.nombre} - {self.licitacion.titulo}"
+
+
+class ComponenteTecnico(models.Model):
+    detalle = models.ForeignKey(DetalleLicitacion, on_delete=models.CASCADE, related_name='componentes')
+    especificacion = models.CharField(max_length=255, help_text="Especificación técnica, por ejemplo, 'Procesador Intel Core i7'.")
+
+    def __str__(self):
+        return self.especificacion

@@ -9,6 +9,7 @@ from .views import (
     ver_licitacion_view,
     enviar_propuesta_view,
     seleccionar_ganador_view,
+    agregar_detalle_view
 )
 
 urlpatterns = [
@@ -21,4 +22,5 @@ urlpatterns = [
     path('ver/<int:licitacion_id>/', ver_licitacion_view, name='ver_licitacion'),
     path('propuesta/enviar/<int:licitacion_id>/', enviar_propuesta_view, name='enviar_propuesta'),
     path('seleccionar_ganador/<int:licitacion_id>/<int:propuesta_id>/', seleccionar_ganador_view, name='seleccionar_ganador'),
+    path('licitacion/<int:licitacion_id>/agregar/', agregar_detalle_view, name='agregar_detalle'),
 ]

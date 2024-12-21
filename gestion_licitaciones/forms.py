@@ -1,15 +1,26 @@
 from django import forms
-from .models import Licitacion
+from django.forms import inlineformset_factory
+from .models import Licitacion, DetalleLicitacion, ComponenteTecnico
 
 class LicitacionForm(forms.ModelForm):
     class Meta:
         model = Licitacion
         fields = ['titulo', 'descripcion', 'fecha_cierre']
-        labels = {
-            'titulo': 'Título de la Licitación',
-            'descripcion': 'Descripción',
-            'fecha_cierre': 'Fecha de Cierre',
-        }
-        widgets = {
-            'fecha_cierre': forms.DateInput(attrs={'type': 'date'}),
-        }
+
+class DetalleLicitacionForm(forms.ModelForm):
+    class Meta:
+        model = DetalleLicitacion
+        fields = ['nombre', 'cantidad']
+
+class ComponenteTecnicoForm(forms.ModelForm):
+    class Meta:
+        model = ComponenteTecnico
+        fields = ['especificacion']
+
+ComponenteTecnicoFormSet = inlineformset_factory(
+    DetalleLicitacion, 
+    ComponenteTecnico, 
+    form=ComponenteTecnicoForm, 
+    extra=1, 
+    can_delete=True
+)

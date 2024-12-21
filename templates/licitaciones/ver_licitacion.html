@@ -15,14 +15,32 @@
         <p><strong>Fecha de Publicación:</strong> {{ licitacion.fecha_publicacion }}</p>
         <p><strong>Fecha de Cierre:</strong> {{ licitacion.fecha_cierre }}</p>
 
-        {% if licitacion.estado == 'Abierta' %}
-            <form method="post">
-                {% csrf_token %}
-                <button type="submit" name="cerrar_licitacion" class="dashboard-link" value="Cerrar">Cerrar Licitación</button>
-            </form>
-        {% endif %}
-
-        <a href="{% url 'dashboard' %}" class="dashboard-link">Regresar al Dashboard</a>
+        <h2>Equipos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Componentes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in licitacion.detalles.all %}
+                    <tr>
+                        <td>{{ detalle.nombre }}</td>
+                        <td>{{ detalle.cantidad }}</td>
+                        <td>
+                            <ul>
+                                {% for componente in detalle.componentes.all %}
+                                    <li>{{ componente.especificacion }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'dashboard' %}" class="dashboard-link">Regresar</a>
     </div>
 </body>
 </html>

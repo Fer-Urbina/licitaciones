@@ -1,21 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.utils.timezone import now
-from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
-from .models import Licitacion
-from .serializers import LicitacionSerializer
-from propuestas.models import Propuesta
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
+from rest_framework import status
+from django.utils.timezone import now
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from .models import Licitacion, DetalleLicitacion
+from .serializers import LicitacionSerializer
+from .forms import LicitacionForm, DetalleLicitacionForm, ComponenteTecnico
+from propuestas.models import Propuesta
 from propuestas.forms import PropuestaForm
-from .forms import LicitacionForm
-
+from django.forms import modelformset_factory
 class LicitacionListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -103,6 +101,16 @@ class LicitacionesPorEstadoView(ListAPIView):
         else:
             return Licitacion.objects.none()
 
+class LicitacionCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = LicitacionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(usuario=request.user)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
 def index(request):
     return render(request, 'index.html')
 
@@ -115,33 +123,64 @@ def dashboard(request):
 
 @login_required
 def crear_licitacion_view(request):
-    if request.user.es_licitador:
-        if request.method == 'POST':
-            form = LicitacionForm(request.POST)
-            if form.is_valid():
-                nueva_licitacion = form.save(commit=False)
-                nueva_licitacion.usuario = request.user
-                nueva_licitacion.save()
-                return HttpResponseRedirect(reverse('dashboard'))  # Redirige al dashboard
-        else:
-            form = LicitacionForm()
-        return render(request, 'licitaciones/crear_licitacion.html', {'form': form})
+    if request.method == 'POST':
+        licitacion_form = LicitacionForm(request.POST)
+        if licitacion_form.is_valid():
+            licitacion = licitacion_form.save(commit=False)
+            licitacion.usuario = request.user
+            licitacion.save()
+
+            # Procesar detalles de la tabla
+            nombres = request.POST.getlist('nombre[]')
+            cantidades = request.POST.getlist('cantidad[]')
+            componentes = request.POST.getlist('componentes[]')
+
+            for nombre, cantidad, componentes_detalle in zip(nombres, cantidades, componentes):
+                detalle = DetalleLicitacion.objects.create(
+                    licitacion=licitacion,
+                    nombre=nombre,
+                    cantidad=cantidad,
+                )
+                for componente in componentes_detalle.splitlines():
+                    if componente.strip():
+                        ComponenteTecnico.objects.create(detalle=detalle, especificacion=componente.strip())
+
+            return redirect('dashboard')
+
     else:
-        return HttpResponseRedirect(reverse('dashboard'))  # Redirige al dashboard si no es licitador
+        licitacion_form = LicitacionForm()
 
-def listar_licitaciones(request):
-    return render(request, 'licitaciones/listar.html')  # Asegúrate de que este archivo exista
+    return render(request, 'licitaciones/crear_licitacion.html', {
+        'licitacion_form': licitacion_form,
+    })
 
+@login_required
 def ver_licitacion_view(request, licitacion_id):
     licitacion = get_object_or_404(Licitacion, id=licitacion_id)
+    detalles = licitacion.detalles.all()
+    return render(request, 'licitaciones/ver_licitacion.html', {
+        'licitacion': licitacion,
+        'detalles': detalles,
+    })
 
-    if request.method == 'POST' and request.POST.get('cerrar_licitacion') == 'Cerrar':
-        if licitacion.estado == 'Abierta':
-            licitacion.estado = 'Cerrada'
-            licitacion.save()
-        return HttpResponseRedirect(reverse('ver_licitacion', args=[licitacion_id]))
+@login_required
+def agregar_detalle_view(request, licitacion_id):
+    licitacion = get_object_or_404(Licitacion, id=licitacion_id)
 
-    return render(request, 'licitaciones/ver_licitacion.html', {'licitacion': licitacion})
+    if request.method == 'POST':
+        form = DetalleLicitacionForm(request.POST)
+        if form.is_valid():
+            detalle = form.save(commit=False)
+            detalle.licitacion = licitacion
+            detalle.save()
+            return redirect('ver_licitacion', licitacion_id=licitacion.id)
+    else:
+        form = DetalleLicitacionForm()
+
+    return render(request, 'gestion_licitaciones/agregar_detalle.html', {
+        'form': form,
+        'licitacion': licitacion,
+    })
 
 @login_required
 def enviar_propuesta_view(request, licitacion_id):

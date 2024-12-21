@@ -17,5 +17,4 @@ urlpatterns = [
     path('api/propuestas/', include('propuestas.urls')),  # Conecta las rutas de propuestas
     path('api/evaluaciones/', include('evaluaciones.urls')),
     path('crear/', licitaciones_views.crear_licitacion_view, name='crear_licitacion'),  # Ruta para crear licitación
-    path('licitaciones/', licitaciones_views.listar_licitaciones, name='licitaciones'),  # Ruta para listar licitaciones
 ]
